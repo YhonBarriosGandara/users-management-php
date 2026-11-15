@@ -1,0 +1,54 @@
+services:
+  # Servicio de Base de Datos MariaDB
+  db:
+    image: mariadb:10.11
+    container_name: fincas_mariadb_php
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: crud_usuarios
+      MYSQL_USER: estudiante
+      MYSQL_PASSWORD: developer
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_php_data:/var/lib/mysql
+      - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./sql/02_seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -uroot -prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fincas_php_network
+
+  # Servicio de Aplicación PHP 8.2 Apache
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fincas_app_php
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: crud_usuarios
+      DB_USERNAME: estudiante
+      DB_PASSWORD: developer
+      DB_CHARSET: utf8mb4
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fincas_php_network
+
+networks:
+  fincas_php_network:
+    driver: bridge
+
+volumes:
+  mariadb_php_data:
+    driver: local
