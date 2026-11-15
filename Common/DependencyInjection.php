@@ -156,4 +156,83 @@ final class DependencyInjection
             self::getUserRepository()
         );
     }
+
+    // ──────────────────────────────────────────────────────────
+    // Finca Module Services & Factory Methods
+    // ──────────────────────────────────────────────────────────
+
+    public static function getFincaPersistenceMapper(): FincaPersistenceMapper
+    {
+        ClassLoader::loadClass('FincaPersistenceMapper');
+
+        return new FincaPersistenceMapper();
+    }
+
+    public static function getFincaRepository(): FincaRepositoryMySQL
+    {
+        ClassLoader::loadClass('FincaRepositoryMySQL');
+
+        return new FincaRepositoryMySQL(
+            self::getPdo(),
+            self::getFincaPersistenceMapper()
+        );
+    }
+
+    public static function getCreateFincaUseCase(): CreateFincaUseCase
+    {
+        ClassLoader::loadClass('CreateFincaService');
+
+        return new CreateFincaService(self::getFincaRepository());
+    }
+
+    public static function getUpdateFincaUseCase(): UpdateFincaUseCase
+    {
+        ClassLoader::loadClass('UpdateFincaService');
+        $repo = self::getFincaRepository();
+
+        return new UpdateFincaService($repo, $repo);
+    }
+
+    public static function getGetFincaByIdUseCase(): GetFincaByIdUseCase
+    {
+        ClassLoader::loadClass('GetFincaByIdService');
+
+        return new GetFincaByIdService(self::getFincaRepository());
+    }
+
+    public static function getGetAllFincasUseCase(): GetAllFincasUseCase
+    {
+        ClassLoader::loadClass('GetAllFincasService');
+
+        return new GetAllFincasService(self::getFincaRepository());
+    }
+
+    public static function getDeleteFincaUseCase(): DeleteFincaUseCase
+    {
+        ClassLoader::loadClass('DeleteFincaService');
+        $repo = self::getFincaRepository();
+
+        return new DeleteFincaService($repo, $repo);
+    }
+
+    public static function getFincaWebMapper(): FincaWebMapper
+    {
+        ClassLoader::loadClass('FincaWebMapper');
+
+        return new FincaWebMapper();
+    }
+
+    public static function getFincaController(): FincaController
+    {
+        ClassLoader::loadClass('FincaController');
+
+        return new FincaController(
+            self::getCreateFincaUseCase(),
+            self::getUpdateFincaUseCase(),
+            self::getGetFincaByIdUseCase(),
+            self::getGetAllFincasUseCase(),
+            self::getDeleteFincaUseCase(),
+            self::getFincaWebMapper()
+        );
+    }
 }

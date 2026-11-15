@@ -78,7 +78,7 @@ if ($httpMethod !== $definition['method']) {
 }
 
 // Protect all user management routes behind authentication.
-$publicActions = array('home', 'login', 'authenticate', 'logout', 'forgot', 'forgot.send', 'create', 'store');
+$publicActions = array('home', 'login', 'authenticate', 'logout', 'forgot', 'forgot.send', 'create', 'store', 'fincas.index', 'fincas.show', 'fincas.create', 'fincas.store', 'fincas.edit', 'fincas.update', 'fincas.delete');
 if (!in_array($definition['action'], $publicActions, true) && !isLoggedIn()) {
     Flash::setMessage('Debes iniciar sesión para acceder a esta sección.');
     View::redirect('auth.login');
@@ -180,6 +180,105 @@ try {
             $controller->delete($id);
             Flash::setSuccess('Usuario eliminado correctamente.');
             View::redirect('users.index');
+            break;
+
+        case 'fincas.index':
+            $controller = DependencyInjection::getFincaController();
+            $fincas = $controller->index();
+            View::render('fincas/list', array(
+                'pageTitle' => 'Gestión de Fincas',
+                'fincas' => $fincas,
+                'message' => Flash::message(),
+                'success' => Flash::success(),
+            ));
+            break;
+
+        case 'fincas.create':
+            View::render('fincas/create', array(
+                'pageTitle' => 'Registrar Nueva Finca',
+                'message' => Flash::message(),
+                'errors' => Flash::errors(),
+                'old' => Flash::old(),
+            ));
+            break;
+
+        case 'fincas.store':
+            $controller = DependencyInjection::getFincaController();
+            $id = trim((string) ($_POST['id'] ?? ''));
+            if ($id === '') {
+                $id = 'FINCA-' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            }
+            $request = new CreateFincaWebRequest(
+                $id,
+                (string) ($_POST['nombre'] ?? ''),
+                (float) ($_POST['num_hectareas'] ?? 0),
+                !empty($_POST['metros_cuadrados']) ? (float) $_POST['metros_cuadrados'] : null,
+                (string) ($_POST['propietario'] ?? ''),
+                (string) ($_POST['capataz'] ?? ''),
+                (string) ($_POST['pais'] ?? 'Colombia'),
+                (string) ($_POST['departamento'] ?? ''),
+                (string) ($_POST['ciudad'] ?? ''),
+                !empty($_POST['produce_leche']),
+                !empty($_POST['produce_cereales']),
+                !empty($_POST['produce_frutas']),
+                !empty($_POST['produce_verduras'])
+            );
+            $controller->store($request);
+            Flash::setSuccess('Finca registrada exitosamente.');
+            View::redirect('fincas.index');
+            break;
+
+        case 'fincas.show':
+            $controller = DependencyInjection::getFincaController();
+            $id = isset($_GET['id']) ? trim((string) $_GET['id']) : '';
+            $finca = $controller->show($id);
+            View::render('fincas/show', array(
+                'pageTitle' => 'Detalle de Finca',
+                'finca' => $finca,
+                'message' => Flash::message(),
+            ));
+            break;
+
+        case 'fincas.edit':
+            $controller = DependencyInjection::getFincaController();
+            $id = isset($_GET['id']) ? trim((string) $_GET['id']) : '';
+            $finca = $controller->show($id);
+            View::render('fincas/edit', array(
+                'pageTitle' => 'Editar Finca',
+                'finca' => $finca,
+                'message' => Flash::message(),
+                'errors' => Flash::errors(),
+            ));
+            break;
+
+        case 'fincas.update':
+            $controller = DependencyInjection::getFincaController();
+            $request = new UpdateFincaWebRequest(
+                (string) ($_POST['id'] ?? ''),
+                (string) ($_POST['nombre'] ?? ''),
+                (float) ($_POST['num_hectareas'] ?? 0),
+                !empty($_POST['metros_cuadrados']) ? (float) $_POST['metros_cuadrados'] : null,
+                (string) ($_POST['propietario'] ?? ''),
+                (string) ($_POST['capataz'] ?? ''),
+                (string) ($_POST['pais'] ?? 'Colombia'),
+                (string) ($_POST['departamento'] ?? ''),
+                (string) ($_POST['ciudad'] ?? ''),
+                !empty($_POST['produce_leche']),
+                !empty($_POST['produce_cereales']),
+                !empty($_POST['produce_frutas']),
+                !empty($_POST['produce_verduras'])
+            );
+            $controller->update($request);
+            Flash::setSuccess('Finca actualizada exitosamente.');
+            View::redirect('fincas.index');
+            break;
+
+        case 'fincas.delete':
+            $controller = DependencyInjection::getFincaController();
+            $id = isset($_POST['id']) ? trim((string) $_POST['id']) : '';
+            $controller->delete($id);
+            Flash::setSuccess('Finca eliminada correctamente.');
+            View::redirect('fincas.index');
             break;
 
         case 'login':
