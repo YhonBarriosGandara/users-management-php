@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "8b9e6912-32a1-4ef3-b4d2-7ec0a6f44f12",
+		"name": "CRUD Usuarios y Fincas - PHP Hexagonal DDD",
+		"description": "Colección completa de pruebas Postman para la aplicación users-management-php (Desarrollo Web Unidad 3 - CTEV Universidad de Cartagena). Cubre las operaciones CRUDL completas para Fincas (Ejercicio N.º 4) y Usuarios.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fincas (Ejercicio N.º 4)",
+			"item": [
+				{
+					"name": "1. Listar Fincas (List)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.list"
+								}
+							]
+						},
+						"description": "Lista todas las fincas registradas en el sistema (incluyendo las semillas iniciales)."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Formulario Crear Finca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.create"
+								}
+							]
+						},
+						"description": "Obtiene la vista del formulario HTML de registro de fincas."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Guardar Finca (Create)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nombre",
+									"value": "Hacienda El Rosal",
+									"type": "text"
+								},
+								{
+									"key": "num_hectareas",
+									"value": "150.75",
+									"type": "text"
+								},
+								{
+									"key": "propietario",
+									"value": "Mateo Morales",
+									"type": "text"
+								},
+								{
+									"key": "capataz",
+									"value": "Gabriel Rivera",
+									"type": "text"
+								},
+								{
+									"key": "pais",
+									"value": "Colombia",
+									"type": "text"
+								},
+								{
+									"key": "departamento",
+									"value": "Antioquia",
+									"type": "text"
+								},
+								{
+									"key": "ciudad",
+									"value": "Santa Fe de Antioquia",
+									"type": "text"
+								},
+								{
+									"key": "produce_leche",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "produce_cereales",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "produce_frutas",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "produce_verduras",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.store",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.store"
+								}
+							]
+						},
+						"description": "Crea una nueva finca con sus 12 atributos. El dominio calcula automáticamente los metros cuadrados (150.75 * 10000 = 1507500 m²)."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Ver Detalle de Finca (Read / Show)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.show&id=FINCA-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.show"
+								},
+								{
+									"key": "id",
+									"value": "FINCA-001"
+								}
+							]
+						},
+						"description": "Obtiene la ficha técnica detallada de una finca por su identificador."
+					},
+					"response": []
+				},
+				{
+					"name": "5. Formulario Editar Finca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.edit&id=FINCA-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.edit"
+								},
+								{
+									"key": "id",
+									"value": "FINCA-001"
+								}
+							]
+						},
+						"description": "Carga el formulario precargado para edición."
+					},
+					"response": []
+				},
+				{
+					"name": "6. Actualizar Finca (Update)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nombre",
+									"value": "Finca La Esperanza Renovada",
+									"type": "text"
+								},
+								{
+									"key": "num_hectareas",
+									"value": "130.00",
+									"type": "text"
+								},
+								{
+									"key": "propietario",
+									"value": "Roberto Gómez Jr.",
+									"type": "text"
+								},
+								{
+									"key": "capataz",
+									"value": "Pedro Martínez",
+									"type": "text"
+								},
+								{
+									"key": "pais",
+									"value": "Colombia",
+									"type": "text"
+								},
+								{
+									"key": "departamento",
+									"value": "Antioquia",
+									"type": "text"
+								},
+								{
+									"key": "ciudad",
+									"value": "Rionegro",
+									"type": "text"
+								},
+								{
+									"key": "produce_leche",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "produce_cereales",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "produce_frutas",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "produce_verduras",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.update&id=FINCA-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.update"
+								},
+								{
+									"key": "id",
+									"value": "FINCA-001"
+								}
+							]
+						},
+						"description": "Actualiza la información del predio e invoca el comando UpdateFincaCommand recalculando superficie."
+					},
+					"response": []
+				},
+				{
+					"name": "7. Eliminar Finca (Delete)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=fincas.delete&id=FINCA-007",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fincas.delete"
+								},
+								{
+									"key": "id",
+									"value": "FINCA-007"
+								}
+							]
+						},
+						"description": "Elimina una finca del sistema mediante DeleteFincaCommand."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios (Entidad Base)",
+			"item": [
+				{
+					"name": "1. Listar Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?action=users.list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "users.list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Iniciar Sesión",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@crud.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?action=login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "login"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
