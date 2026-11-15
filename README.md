@@ -76,7 +76,7 @@ users-management-php/
 
 ---
 
-## 3. Puesta en Marcha y Pruebas Locales
+## 3. Puesta en Marcha y Pruebas Locales (Nativa)
 
 ### Requisitos
 - PHP 8.2+ con extensión `pdo_mysql` habilitada.
@@ -87,15 +87,88 @@ users-management-php/
    ```bash
    cp .env.example .env
    ```
-2. Inicializar la base de datos ejecutando los scripts SQL:
+2. Inicializar la base de datos ejecutando los scripts SQL unificados:
    ```bash
-   mysql -u Estudiante -pDeveloper crud_usuarios < Infrastructure/Adapters/Persistence/MySQL/Database/fincas.sql
-   mysql -u Estudiante -pDeveloper crud_usuarios < Infrastructure/Adapters/Persistence/MySQL/Database/fincas_seed.sql
+   mysql -u Estudiante -pDeveloper crud_usuarios < sql/01_schema.sql
+   mysql -u Estudiante -pDeveloper crud_usuarios < sql/02_seeds.sql
    ```
 3. Iniciar el servidor web local con PHP:
    ```bash
    php -S localhost:8000 -t public
    ```
 4. Abrir en el navegador:
-   - Panel de Fincas: `http://localhost:8000/?route=fincas.index`
-   - Registro de Finca: `http://localhost:8000/?route=fincas.create`
+   - Panel de Fincas: `http://localhost:8000/index.php?action=fincas.list`
+   - Registro de Finca: `http://localhost:8000/index.php?action=fincas.create`
+
+---
+
+## 4. Ejecución con Docker y Docker Compose (Paso 24)
+
+El proyecto incluye contenedores listos para producción que levantan tanto la base de datos MariaDB 10.11 como el servidor Apache con PHP 8.2 y las semillas precargadas:
+
+```bash
+# Construir y levantar los servicios en segundo plano
+docker compose up -d
+
+# Verificar estado y salud de los contenedores
+docker compose ps
+
+# Acceder a la aplicación
+http://localhost:8000/index.php?action=fincas.list
+```
+
+---
+
+## 5. Pruebas Automatizadas con Postman (Paso 23)
+
+Se suministra una colección exportada en formato Postman v2.1 ubicada en `postman/users-management-php.postman_collection.json`.
+
+### Endpoints cubiertos en la colección:
+- **Gestión de Fincas (Ejercicio N.º 4):**
+  - `GET /index.php?action=fincas.list` (Listado completo)
+  - `GET /index.php?action=fincas.create` (Formulario de creación)
+  - `POST /index.php?action=fincas.store` (Creación con cálculo automático de $m^2$)
+  - `GET /index.php?action=fincas.show&id={id}` (Detalle técnico del predio)
+  - `GET /index.php?action=fincas.edit&id={id}` (Formulario de edición)
+  - `POST /index.php?action=fincas.update&id={id}` (Actualización de atributos)
+  - `POST /index.php?action=fincas.delete&id={id}` (Eliminación en cascada)
+- **Gestión de Usuarios:**
+  - `GET /index.php?action=users.list` (Listar usuarios)
+  - `POST /index.php?action=login` (Autenticación con sesión)
+
+---
+
+## 6. Migración de Base de Datos a la Nube (Paso 17)
+
+Para aprovisionar y migrar la base de datos a servicios en la nube (Aiven, Render, Railway, TiDB Serverless, Clever Cloud):
+1. Configurar las credenciales remotas en el archivo `.env`:
+   ```env
+   DB_HOST=servidor-remoto-mysql.com
+   DB_PORT=3306
+   DB_DATABASE=crud_usuarios
+   DB_USERNAME=usuario_remoto
+   DB_PASSWORD=password_remoto
+   ```
+2. Ejecutar el asistente de migración:
+   ```bash
+   chmod +x scripts/migrate_to_cloud.sh
+   ./scripts/migrate_to_cloud.sh
+   ```
+
+---
+
+## 7. Despliegue en la Nube con Render / Zeabur (Paso 25)
+
+El repositorio incluye manifiestos de Infraestructura como Código (IaC):
+- **Render (`render.yaml`):** Despliegue de servicio web en contenedor Docker con healthcheck en `/index.php?action=fincas.list`.
+- **Zeabur (`zeabur.json`):** Despliegue serverless de contenedor con exposición en puerto 80.
+
+---
+
+## 8. Integración Continua con GitHub Actions (Paso 26)
+
+El pipeline configurado en `.github/workflows/ci.yml` se ejecuta automáticamente en cada `push` o `pull request` realizando:
+1. **Linting y Validación Sintáctica:** Verificación estricta de sintaxis con `php -l` en todos los archivos del proyecto bajo PHP 8.2.
+2. **Validación de Descriptores:** Comprobación de integridad de `.env.example`, `sql/01_schema.sql` y `sql/02_seeds.sql`.
+3. **Build de Contenedor Docker:** Construcción automatizada de la imagen Docker en runners de GitHub.
+
