@@ -1,0 +1,29 @@
+# ================================================================
+# Blueprint de Infraestructura como Código para Render (Paso 25)
+# Proyecto: users-management-php (Arquitectura Hexagonal + DDD)
+# ================================================================
+
+services:
+  # Servicio Web (Contenedor Docker PHP 8.2 Apache)
+  - type: web
+    name: users-management-php-app
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /index.php?action=fincas.list
+    envVars:
+      - key: PORT
+        value: 80
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        value: crud_usuarios
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CHARSET
+        value: utf8mb4

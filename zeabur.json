@@ -1,0 +1,15 @@
+{
+  "serviceName": "users-management-php",
+  "dockerfile": "Dockerfile",
+  "ports": [
+    {
+      "port": 80,
+      "type": "http"
+    }
+  ],
+  "env": {
+    "DB_PORT": "3306",
+    "DB_DATABASE": "crud_usuarios",
+    "DB_CHARSET": "utf8mb4"
+  }
+}
