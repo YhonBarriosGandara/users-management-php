@@ -42,6 +42,34 @@ final class WebRoutes
                 'method' => 'POST',
                 'action' => 'delete',
             ),
+            'fincas.index' => array(
+                'method' => 'GET',
+                'action' => 'fincas.index',
+            ),
+            'fincas.create' => array(
+                'method' => 'GET',
+                'action' => 'fincas.create',
+            ),
+            'fincas.store' => array(
+                'method' => 'POST',
+                'action' => 'fincas.store',
+            ),
+            'fincas.show' => array(
+                'method' => 'GET',
+                'action' => 'fincas.show',
+            ),
+            'fincas.edit' => array(
+                'method' => 'GET',
+                'action' => 'fincas.edit',
+            ),
+            'fincas.update' => array(
+                'method' => 'POST',
+                'action' => 'fincas.update',
+            ),
+            'fincas.delete' => array(
+                'method' => 'POST',
+                'action' => 'fincas.delete',
+            ),
             'auth.login' => array(
                 'method' => 'GET',
                 'action' => 'login',
