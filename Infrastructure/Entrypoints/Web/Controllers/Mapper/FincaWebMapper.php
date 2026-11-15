@@ -53,6 +53,16 @@ final class FincaWebMapper
         );
     }
 
+    public function fromIdToGetByIdQuery(string $id): GetFincaByIdQuery
+    {
+        return new GetFincaByIdQuery($id);
+    }
+
+    public function fromIdToDeleteCommand(string $id): DeleteFincaCommand
+    {
+        return new DeleteFincaCommand($id);
+    }
+
     public function fromModelToResponse(FincaModel $model): FincaResponse
     {
         return new FincaResponse(
