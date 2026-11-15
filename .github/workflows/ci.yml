@@ -1,0 +1,55 @@
+name: CI Pipeline - Lint, Test & Docker Build
+
+on:
+  push:
+    branches: [ "main", "feat/**", "feature/**" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-syntax-check:
+    name: PHP 8.2 Syntax & Lint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Código Fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP 8.2 con Extensiones
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_mysql, json, mbstring
+          coverage: none
+
+      - name: Validar Sintaxis de Todos los Archivos PHP
+        run: |
+          echo "Ejecutando php -l en todos los archivos del proyecto..."
+          find . -type f -name "*.php" -not -path "./vendor/*" -exec php -l {} +
+
+      - name: Verificar Integridad de Archivos de Configuración
+        run: |
+          test -f .env.example || (echo "Falta .env.example" && exit 1)
+          test -f sql/01_schema.sql || (echo "Falta sql/01_schema.sql" && exit 1)
+          test -f sql/02_seeds.sql || (echo "Falta sql/02_seeds.sql" && exit 1)
+          echo "Todos los descriptores y esquemas están presentes."
+
+  docker-build-test:
+    name: Docker Container Build Check
+    runs-on: ubuntu-latest
+    needs: lint-and-syntax-check
+
+    steps:
+      - name: Checkout Código Fuente
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Compilar Imagen Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: users-management-php:ci-test
