@@ -38,7 +38,7 @@
                     <td><?= htmlspecialchars($user->getRole(), ENT_QUOTES, 'UTF-8') ?></td>
                     <td><?= htmlspecialchars($user->getStatus(), ENT_QUOTES, 'UTF-8') ?></td>
                     <td class="col-actions">
-                        <a class="btn btn-sm" href="?route=users.show&amp;id=<?= urlencode($user->getId()) ?>">Ver</a>
+                        <a class="btn btn-secondary btn-sm" href="?route=users.show&amp;id=<?= urlencode($user->getId()) ?>">Ver</a>
                         <a class="btn btn-warning btn-sm"
                             href="?route=users.edit&amp;id=<?= urlencode($user->getId()) ?>">Editar</a>
                         <form method="POST" action="?route=users.delete" style="display:inline;"

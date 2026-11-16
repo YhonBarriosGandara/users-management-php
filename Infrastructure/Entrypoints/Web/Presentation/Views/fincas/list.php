@@ -60,7 +60,7 @@
                         </small>
                     </td>
                     <td class="col-actions">
-                        <a class="btn btn-sm" href="?route=fincas.show&amp;id=<?= urlencode($finca->id()) ?>">Ver</a>
+                        <a class="btn btn-secondary btn-sm" href="?route=fincas.show&amp;id=<?= urlencode($finca->id()) ?>">Ver</a>
                         <a class="btn btn-warning btn-sm" href="?route=fincas.edit&amp;id=<?= urlencode($finca->id()) ?>">Editar</a>
                         <form method="POST" action="?route=fincas.delete" style="display:inline;"
                             onsubmit="return confirm('¿Está seguro de eliminar la finca <?= htmlspecialchars($finca->nombre(), ENT_QUOTES, 'UTF-8') ?>?');">
