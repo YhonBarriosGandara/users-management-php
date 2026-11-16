@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($pageTitle ?? 'CRUD Usuarios', ENT_QUOTES, 'UTF-8') ?></title>
-    <link rel="stylesheet" href="../Infrastructure/Entrypoints/Web/Presentation/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>

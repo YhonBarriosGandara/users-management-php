@@ -11,8 +11,8 @@ INSERT INTO roles (id, name) VALUES
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 INSERT INTO users (id, name, email, password, role, status) VALUES
-('1', 'Administrador', 'admin@crud.com', 'admin123', 'ADMIN', 'ACTIVE'),
-('2', 'Operador Agrícola', 'operador@crud.com', 'operador123', 'MEMBER', 'ACTIVE')
+('1', 'Administrador', 'admin@crud.com', '$2y$12$NLO6BH1SpC/GRlVrfAit9.t7GbfyiAX8zOZ5.1MfuTk3y7/Osv55.', 'ADMIN', 'ACTIVE'),
+('2', 'Operador Agrícola', 'operador@crud.com', '$2y$12$ibRYWijA3aEWiBomw6Fr7uNHjf0nFbWzrYkMWfJ.VXZcXPlOg5uwO', 'MEMBER', 'ACTIVE')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 INSERT INTO fincas (
